@@ -6,20 +6,20 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/@types/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id           Int    @id @default(autoincrement())
-  publicId     String @unique @default(uuid())
-  name         String
-  username     String @unique
-  email        String @unique
-  passwordHash String
+  id       Int     @id @default(autoincrement())
+  publicId String  @unique @default(uuid())
+  nome     String
+  email    String  @unique
+  senha    String
+  foto     String?
 
   posts Post[]
 
@@ -32,14 +32,14 @@ model User {
 model Post {
   id       Int    @id @default(autoincrement())
   publicId String @unique @default(uuid())
-  title    String
-  content  String
-
-  userId Int
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  titulo   String
+  conteudo String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("posts")
 }
